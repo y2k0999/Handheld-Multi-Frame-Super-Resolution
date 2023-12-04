@@ -13,12 +13,16 @@ def get_xyz2cam_from_exif(impath):
 
     # Return the exif tags
     tags = exifread.process_file(f)
-
-    # Get the 9 values of the first CCM in the EXIF
-    color_matrix1 = tags['Image Tag 0xC621']
-    color_matrix1 = np.array([x.decimal() for x in color_matrix1.values])
-
-
+    try:
+        # Get the 9 values of the first CCM in the EXIF
+        color_matrix1 = tags['Image Tag 0xC621']
+        color_matrix1 = np.array([x.decimal() for x in color_matrix1.values])
+        np.save('sample_ccm.npy', color_matrix1)
+    except:
+        color_matrix1 = np.load('sample_ccm.npy')
+        print('WARNING: loading default ccm')
+        print('this isn\'t specific to you\'re camera and will give a worse result')
+        print('-----')
     # Fill the matrix and return
     xyz2cam = np.reshape(color_matrix1, (3, 3))
 

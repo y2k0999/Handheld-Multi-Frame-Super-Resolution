@@ -154,7 +154,8 @@ cython_debug/
 *.png
 *.npy
 *.jpg
-
+*.dng
+*.raw
 # VIM
 **/*.swp
 

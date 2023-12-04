@@ -261,8 +261,15 @@ def process(burst_path, options=None, custom_params=None):
         # Averaging RGB noise values
         ## IMPORTANT NOTE : the noise model exif already are NOT for nominal ISO 100
         ## But are already scaled for the image ISO.
-        alpha = sum([x[0] for x in tags['Image Tag 0xC761'].values[::2]])/3
-        beta = sum([x[0] for x in tags['Image Tag 0xC761'].values[1::2]])/3
+        try:
+            alpha = sum([x[0] for x in tags['Image Tag 0xC761'].values[::2]])/3
+            beta = sum([x[0] for x in tags['Image Tag 0xC761'].values[1::2]])/3
+        except:
+            alpha = 1.80710882e-4 * ISO / 100
+            beta = 3.1937599182128e-6 * (ISO / 100)**2
+            print('WARNING: applying default alpha and beta')
+            print('this may affect your accuracy')
+            print('can change this at line ~270 in super_resolution.py')
     
     #### Packing noise model related to picture ISO
     # curve_iso = round_iso(ISO) # Rounds non standart ISO to regular ISO (100, 200, 400, ...)
